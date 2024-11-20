@@ -8,11 +8,7 @@ public class UserController : Controller
 {
     public static System.Collections.Generic.List<User> userlist = new System.Collections.Generic.List<User>();
 
-        // GET: User
-        public ActionResult Index()
-        {
-            return View(userlist);
-        }
+      
 
         // GET: User/Details/5
         public ActionResult Details(int id)
@@ -101,4 +97,21 @@ public class UserController : Controller
             userlist.Remove(user);
             return RedirectToAction(nameof(Index));
         }
+
+         // GET: User
+        public ActionResult Index(string searchString)
+        {
+            var users = from u in userlist
+                        select u;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                users = users.Where(u => u.Name.Contains(searchString));
+            }
+
+            return View(users.ToList());
+        }
+
+        
+    
 }
